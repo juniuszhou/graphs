@@ -1,0 +1,10 @@
+{
+  "$schema": "https://langgra.ph/schema.json",
+  "dependencies": ["."],
+  "graphs": {
+    "basic_graph": "./src/agent/graph.py:graph",
+    "chat_graph": "./src/agent/chat_graph.py:graph"
+  },
+  "env": ".env",
+  "image_distro": "wolfi"
+}
