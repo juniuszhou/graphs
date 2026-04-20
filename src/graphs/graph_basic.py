@@ -36,7 +36,3 @@ graph = (
     .add_edge("node_two", END)
     .compile(name="basic_graph")
 )
-
-# the result the final state of the graph.
-result = graph.invoke({})
-print("result as: \n", result)

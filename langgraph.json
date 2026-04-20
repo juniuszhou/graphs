@@ -2,9 +2,9 @@
   "$schema": "https://langgra.ph/schema.json",
   "dependencies": ["."],
   "graphs": {
-    "basic_graph": "./src/agent/graph.py:graph",
-    "chat_graph": "./src/agent/chat_graph.py:graph"
+    "agent-simple": "./src/agent/simple.py:agent",
+    "graph-router": "./src/graphs/router.py:graph"
   },
   "env": ".env",
-  "image_distro": "wolfi"
+  "image-distro": "wolfi"
 }
