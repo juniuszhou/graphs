@@ -2,9 +2,11 @@
   "$schema": "https://langgra.ph/schema.json",
   "dependencies": ["."],
   "graphs": {
+    "deep-search": "./src/deep/search.py:agent",
     "agent-simple": "./src/agent/simple.py:agent",
     "graph-basic": "./src/graphs/basic.py:graph",
-    "graph-router": "./src/graphs/router.py:graph"
+    "graph-router": "./src/graphs/router.py:graph",
+    "graph-tools": "./src/graphs/tools.py:graph"
   },
   "env": ".env",
   "image-distro": "wolfi"

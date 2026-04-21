@@ -12,3 +12,10 @@ llm = ChatOpenAI(
     base_url="http://localhost:11434/v1",
     api_key="ollama",
 )
+
+gemma_llm = ChatOpenAI(
+    model="gemma4:e2b",
+    temperature=0,
+    base_url="http://localhost:11434/v1",
+    api_key="ollama",
+)

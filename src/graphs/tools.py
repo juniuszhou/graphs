@@ -92,22 +92,3 @@ graph.add_edge("tools", "our_agent")
 
 app = graph.compile()
 
-
-def print_stream(stream):
-    for s in stream:
-        message = s["messages"][-1]
-        if isinstance(message, tuple):
-            print(message)
-        else:
-            message.pretty_print()
-
-
-inputs = {
-    "messages": [
-        (
-            "user",
-            "Add 40 + 12 and then times the result by 6. Also tell me a joke please.",
-        )
-    ]
-}
-print_stream(app.stream(inputs, stream_mode="values"))
