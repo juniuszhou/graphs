@@ -3,6 +3,7 @@
   "dependencies": ["."],
   "graphs": {
     "agent-simple": "./src/agent/simple.py:agent",
+    "graph-basic": "./src/graphs/basic.py:graph",
     "graph-router": "./src/graphs/router.py:graph"
   },
   "env": ".env",
