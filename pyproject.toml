@@ -9,8 +9,10 @@ readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.14"
 dependencies = [
+    "datasets>=4.8.5",
     "deepagents>=0.5.3",
     "langchain>=1.2.15",
+    "langchain-mcp-adapters>=0.2.2",
     "langchain-openai>=1.1.15",
     "langgraph>=1.0.0",
     "python-dotenv>=1.0.1",

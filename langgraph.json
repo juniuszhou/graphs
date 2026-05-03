@@ -6,7 +6,8 @@
     "agent-simple": "./src/agent/simple.py:agent",
     "graph-basic": "./src/graphs/basic.py:graph",
     "graph-router": "./src/graphs/router.py:graph",
-    "graph-tools": "./src/graphs/tools.py:graph"
+    "graph-tools": "./src/graphs/tools.py:graph",
+    "smith-trace-demo": "./src/smith/trace.py:graph"
   },
   "env": ".env",
   "image-distro": "wolfi"

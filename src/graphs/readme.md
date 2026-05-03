@@ -37,7 +37,7 @@ multiple node returned state will be reduced later according to the order.
 
 ## Command
 
-dynamic to set the message flow
+dynamic to set the message flow。 command also a node
 
 ## Durable Execution
 

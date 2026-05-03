@@ -7,10 +7,10 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from utils.llms import llm
+from utils.llms import gemma_llm
 
 agent = create_agent(
-    model=llm,
+    model=gemma_llm,
     tools=[],
     system_prompt="You are a helpful assistant",
 )
