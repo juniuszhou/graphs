@@ -6,18 +6,11 @@ from pathlib import Path
 
 DEEPWIKI_MCP_URL = "https://mcp.deepwiki.com/mcp"
 
-
-def _remove_script_dir_from_path() -> None:
-    """Avoid shadowing the upstream `mcp` package with this example file."""
-    script_dir = Path(__file__).resolve().parent
-    if sys.path and Path(sys.path[0]).resolve() == script_dir:
-        sys.path.pop(0)
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 
 async def run_deepwiki_agent_example() -> None:
     """Ask DeepWiki's MCP server a question and print the agent response."""
-    _remove_script_dir_from_path()
-
     from langchain.agents import create_agent
     from langchain_mcp_adapters.client import MultiServerMCPClient
 

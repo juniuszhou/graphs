@@ -1,0 +1,43 @@
+from typing import TypedDict, Dict, Optional
+from langgraph.graph import StateGraph, START, END
+from langsmith import traceable, trace
+
+# define a state
+class AgentState(TypedDict):
+    message: str
+    context: str
+    history: Optional[str]
+
+
+# define a node
+@traceable
+def node_one(state: AgentState) -> AgentState:
+    """Greeting node"""
+    with trace(name="node_one") as smith_trace:
+        state["message"] = "I am node one"
+        state["context"] = "It is start of the graph"
+        smith_trace.end(outputs ={"output": state["message"]})
+        return state
+
+
+@traceable
+def node_two(state: AgentState) -> AgentState:
+    """Greeting node"""
+    state["history"] = state["message"]
+    state["message"] = "I am node two"
+
+    return state
+
+
+# () can be used to define a bunch of operations with the returned value of the first function.
+graph = (
+    StateGraph(AgentState)
+    .add_node(node_one)
+    .add_node(node_two)
+    .add_edge(START, "node_one")
+    .add_edge("node_one", "node_two")
+    .add_edge("node_two", END)
+    .compile(name="basic_graph")
+)
+
+# tracing_context is a context manager that can be used to trace a function.
