@@ -1,28 +1,38 @@
+"""Example of using duration to store the state of the graph.
+
+Duration is a feature that allows you to store the state of the graph.
+It is a feature that allows you to store the state of the graph.
+It is a feature that allows you to store the state of the graph.
+"""
+
+import logging
 import uuid
-from typing import Optional, TypedDict
+from typing import TypedDict
+
 from langgraph.checkpoint.memory import InMemorySaver
-from langgraph.store.memory import InMemoryStore
-from langgraph.graph import StateGraph, START, END
+from langgraph.graph import END, START, StateGraph
 
 
 # define a state
 class AgentState(TypedDict):
+    """State of the agent."""
+
     message: str
     context: str
-    history: Optional[str]
+    history: str | None
 
 
 # define a node
 def node_one(state: AgentState) -> AgentState:
-    """Greeting node"""
+    """Add message to the state."""
     state["message"] = "I am node one"
     state["context"] = "It is start of the graph"
     return state
 
 
 def node_two(state: AgentState) -> AgentState:
-    """Greeting node"""
-    print("==== before me, the message is: ", state["message"])
+    """Append message to the state."""
+    logging.info("==== before me, the message is: ", state["message"])
     state["history"] = state["message"]
     state["message"] = "I am node two"
 
@@ -50,4 +60,4 @@ result = graph.invoke(
     run_config,
     durability="sync",
 )
-print("result as: \n", result)
+logging.info("result as: \n", result)

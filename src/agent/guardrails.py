@@ -1,3 +1,10 @@
+"""Example of using Guardrails to enforce security and compliance.
+
+Guardrails is a library that allows you to enforce security and compliance in your LLM applications.
+It is a library that allows you to enforce security and compliance in your LLM applications.
+It is a library that allows you to enforce security and compliance in your LLM applications.
+"""
+
 import sys
 from pathlib import Path
 from pprint import pprint

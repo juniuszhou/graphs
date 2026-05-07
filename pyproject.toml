@@ -18,6 +18,7 @@ dependencies = [
     "langfuse>=4.5.1",
     "langgraph>=1.0.0",
     "python-dotenv>=1.0.1",
+    "ruff>=0.15.12",
     "tavily>=1.1.0",
 ]
 
@@ -63,6 +64,8 @@ lint.ignore = [
 "tests/*" = ["D", "UP"]
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+[tool.ruff.format]
+preview = true
 
 [dependency-groups]
 dev = [

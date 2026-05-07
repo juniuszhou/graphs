@@ -11,34 +11,30 @@ llm = ChatOpenAI(
 
 agent = create_agent(model=llm)
 
-result = agent.invoke(
+result = agent.invoke({
+    "input": "What is the capital of France?",
+    "messages": [HumanMessage(content="What is the capital of France?")],
+})
+print(result["messages"])
+
+results = agent.batch([
     {
         "input": "What is the capital of France?",
         "messages": [HumanMessage(content="What is the capital of France?")],
-    }
-)
-print(result["messages"])
-
-results = agent.batch(
-    [
-        {
-            "input": "What is the capital of France?",
-            "messages": [HumanMessage(content="What is the capital of France?")],
-        },
-        {
-            "input": "What is the capital of France?",
-            "messages": [HumanMessage(content="What is the capital of France?")],
-        },
-    ]
-)
+    },
+    {
+        "input": "What is the capital of France?",
+        "messages": [HumanMessage(content="What is the capital of France?")],
+    },
+])
 for result in results:
     print(result["messages"])
 
 results = agent.stream(
     {
-            "input": "What is the capital of France?",
-            "messages": [HumanMessage(content="What is the capital of France?")],
-        },
+        "input": "What is the capital of France?",
+        "messages": [HumanMessage(content="What is the capital of France?")],
+    },
 )
 for result in results:
     print(result)
@@ -47,9 +43,10 @@ for result in results:
 result = llm.invoke("What is the capital of France?")
 print(result.content)
 
-results = llm.batch(
-    ["What is the capital of France?", "What is the capital of Germany?"]
-)
+results = llm.batch([
+    "What is the capital of France?",
+    "What is the capital of Germany?",
+])
 for result in results:
     print(result.content)
 

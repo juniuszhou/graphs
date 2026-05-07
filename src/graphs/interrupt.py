@@ -113,9 +113,10 @@ def sequential_interrupt_graph():
 
     def node2_handler(state: AgentState) -> AgentState:
         """Second node that creates an interrupt"""
-        approved = interrupt(
-            {"type": "verification", "message": "Please verify step 2"}
-        )
+        approved = interrupt({
+            "type": "verification",
+            "message": "Please verify step 2",
+        })
         return {"messages": state["messages"] + f" | Step 2 verified: {approved}"}
 
     def node3_handler(state: AgentState) -> AgentState:
@@ -144,19 +145,25 @@ def multi_interrupt_node(state: AgentState) -> AgentState:
     def multi_interrupt_node(state: AgentState) -> AgentState:
         """A node that creates multiple interrupts sequentially"""
         # First interrupt - approval
-        approval = interrupt(
-            {"step": 1, "action": "approve", "message": "Approve this action?"}
-        )
+        approval = interrupt({
+            "step": 1,
+            "action": "approve",
+            "message": "Approve this action?",
+        })
 
         # Second interrupt - verification
-        verification = interrupt(
-            {"step": 2, "action": "verify", "message": "Verify the details?"}
-        )
+        verification = interrupt({
+            "step": 2,
+            "action": "verify",
+            "message": "Verify the details?",
+        })
 
         # Third interrupt - confirmation
-        confirmation = interrupt(
-            {"step": 3, "action": "confirm", "message": "Confirm completion?"}
-        )
+        confirmation = interrupt({
+            "step": 3,
+            "action": "confirm",
+            "message": "Confirm completion?",
+        })
 
         return {
             "messages": state["messages"]
@@ -170,9 +177,9 @@ def multi_interrupt_node(state: AgentState) -> AgentState:
         .add_edge("multi_interrupt", END)
         .compile()
     )
-    result = single_node_multi_interrupt_graph.invoke(
-        {"messages": "Testing multiple interrupts."}
-    )
+    result = single_node_multi_interrupt_graph.invoke({
+        "messages": "Testing multiple interrupts."
+    })
     print_interrupt_in_result(result)
 
 
@@ -242,9 +249,10 @@ def multi_interrupt_parallel_graph():
         else:
             node_name = "Unknown"
 
-        approved = interrupt(
-            {"node": node_name, "message": f"Approve from {node_name}?"}
-        )
+        approved = interrupt({
+            "node": node_name,
+            "message": f"Approve from {node_name}?",
+        })
         return {"messages": state["messages"] + f" | {node_name}: {approved}"}
 
     def simple_distributor(state: AgentState):

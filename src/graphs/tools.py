@@ -1,4 +1,10 @@
-# demo how to use tools in a graph, tools should be inputted into the model as a list of tools
+"""Example LangChain agent backed by tools from multiple MCP servers.
+
+Connects a stdio math server and an HTTP weather server via
+:class:`~langchain_mcp_adapters.client.MultiServerMCPClient`, loads their
+tools, and invokes the agent twice for demo prompts.
+"""
+
 from typing import Annotated, Sequence, TypedDict
 from dotenv import load_dotenv
 from langchain_core.messages import (
@@ -21,25 +27,26 @@ load_dotenv()
 
 
 class AgentState(TypedDict):
+    """State of the agent."""
+
     messages: Annotated[Sequence[BaseMessage], add_messages]
 
 
 @tool
-def add(a: int, b: int):
-    """This is an addition function that adds 2 numbers together"""
-
+def add(a: int, b: int) -> int:
+    """Addition function that adds 2 numbers together."""
     return a + b
 
 
 @tool
 def subtract(a: int, b: int):
-    """Subtraction function"""
+    """Subtraction function."""
     return a - b
 
 
 @tool
 def multiply(a: int, b: int):
-    """Multiplication function"""
+    """Multiplication function."""
     return a * b
 
 
@@ -54,6 +61,7 @@ model: BaseChatModel = ChatOpenAI(
 
 
 def model_call(state: AgentState) -> AgentState:
+    """Call the model with the current state."""
     system_prompt = SystemMessage(
         content="You are my AI assistant, please answer my query to the best of your ability."
     )
@@ -62,6 +70,7 @@ def model_call(state: AgentState) -> AgentState:
 
 
 def should_continue(state: AgentState):
+    """Check if the last message contains tool calls."""
     messages = state["messages"]
     last_message = messages[-1]
     if not last_message.tool_calls:
@@ -91,4 +100,3 @@ graph.add_conditional_edges(
 graph.add_edge("tools", "our_agent")
 
 app = graph.compile()
-

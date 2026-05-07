@@ -1,20 +1,27 @@
-from dotenv import load_dotenv
+"""Example of using RAG to answer questions about a document.
+
+RAG is a technique that allows you to answer questions about a document.
+It is a technique that allows you to answer questions about a document.
+It is a technique that allows you to answer questions about a document.
+"""
+
 import os
-from langgraph.graph import StateGraph, END
-from typing import TypedDict, Annotated, Sequence
+from operator import add as add_messages
+from typing import Annotated, Sequence, TypedDict
+
+from dotenv import load_dotenv
+from langchain_chroma import Chroma
+from langchain_community.document_loaders import PyPDFLoader
 from langchain_core.messages import (
     BaseMessage,
-    SystemMessage,
     HumanMessage,
+    SystemMessage,
     ToolMessage,
 )
-from operator import add as add_messages
-from langchain_openai import ChatOpenAI
-from langchain_openai import OpenAIEmbeddings
-from langchain_community.document_loaders import PyPDFLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_chroma import Chroma
 from langchain_core.tools import tool
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langgraph.graph import END, StateGraph
 
 load_dotenv()
 
@@ -70,7 +77,7 @@ try:
         persist_directory=persist_directory,
         collection_name=collection_name,
     )
-    print(f"Created ChromaDB vector store!")
+    print("Created ChromaDB vector store!")
 
 except Exception as e:
     print(f"Error setting up ChromaDB: {str(e)}")
@@ -86,10 +93,7 @@ retriever = vectorstore.as_retriever(
 
 @tool
 def retriever_tool(query: str) -> str:
-    """
-    This tool searches and returns the information from the Stock Market Performance 2024 document.
-    """
-
+    """This tool searches and returns the information from the Stock Market Performance 2024 document."""
     docs = retriever.invoke(query)
 
     if not docs:
@@ -97,7 +101,7 @@ def retriever_tool(query: str) -> str:
 
     results = []
     for i, doc in enumerate(docs):
-        results.append(f"Document {i+1}:\n{doc.page_content}")
+        results.append(f"Document {i + 1}:\n{doc.page_content}")
 
     return "\n\n".join(results)
 
@@ -108,6 +112,8 @@ llm = llm.bind_tools(tools)
 
 
 class AgentState(TypedDict):
+    """State of the agent."""
+
     messages: Annotated[Sequence[BaseMessage], add_messages]
 
 
@@ -132,7 +138,7 @@ tools_dict = {
 
 # LLM Agent
 def call_llm(state: AgentState) -> AgentState:
-    """Function to call the LLM with the current state."""
+    """Return to call the LLM with the current state."""
     messages = list(state["messages"])
     messages = [SystemMessage(content=system_prompt)] + messages
     message = llm.invoke(messages)
@@ -142,7 +148,6 @@ def call_llm(state: AgentState) -> AgentState:
 # Retriever Agent
 def take_action(state: AgentState) -> AgentState:
     """Execute tool calls from the LLM's response."""
-
     tool_calls = state["messages"][-1].tool_calls
     results = []
     for t in tool_calls:
@@ -150,7 +155,7 @@ def take_action(state: AgentState) -> AgentState:
             f"Calling Tool: {t['name']} with query: {t['args'].get('query', 'No query provided')}"
         )
 
-        if not t["name"] in tools_dict:  # Checks if a valid tool is present
+        if t["name"] not in tools_dict:  # Checks if a valid tool is present
             print(f"\nTool: {t['name']} does not exist.")
             result = "Incorrect Tool Name, Please Retry and Select tool from List of Available tools."
 
