@@ -63,5 +63,5 @@ graph = (
 )
 
 # the result the final state of the graph.
-result = graph.invoke({"message": "Hello World", "context": "", "history": None})
-logging.warning("result as: \n %s", result)
+# result = graph.invoke({"message": "Hello World", "context": "", "history": None})
+# logging.warning("result as: \n %s", result)
