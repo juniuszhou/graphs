@@ -7,6 +7,7 @@
     "graph-basic": "./src/graphs/basic.py:graph",
     "graph-router": "./src/graphs/router.py:graph",
     "graph-tools": "./src/graphs/tools.py:graph",
+    "graph-task": "./src/graphs/task.py:graph",
     "smith-trace-demo": "./src/smith/trace.py:graph"
   },
   "env": ".env",

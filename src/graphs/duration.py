@@ -58,6 +58,10 @@ graph = (
 result = graph.invoke(
     {"message": "", "context": ""},
     run_config,
+    # durability="sync"  or "async" or "exit"
+    # sync: persist after each superstep, guarantee persist is completed
+    # async: persist async, no guarantee persist is completed
+    # exit: persist only when program exit. no persist if crash.
     durability="sync",
 )
 logging.info("result as: \n", result)

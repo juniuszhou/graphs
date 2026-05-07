@@ -1,9 +1,7 @@
-from langgraph.channels import EphemeralValue
-from langgraph.channels import LastValue
-from langgraph.channels import Topic
-from langgraph.channels import BinaryOperatorAggregate
-from langgraph.pregel import Pregel, NodeBuilder
 import operator
+
+from langgraph.channels import BinaryOperatorAggregate, EphemeralValue, LastValue, Topic
+from langgraph.pregel import NodeBuilder, Pregel
 
 
 def example_one():

@@ -5,14 +5,12 @@ It is a library that allows you to enforce security and compliance in your LLM a
 It is a library that allows you to enforce security and compliance in your LLM applications.
 """
 
+import logging
 import sys
 from pathlib import Path
-from pprint import pprint
+
 from langchain.agents import create_agent
 from langchain.agents.middleware import PIIMiddleware
-from langchain_core.tools import tool
-from langgraph.checkpoint.memory import InMemorySaver
-from langgraph.types import Command
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from utils.llms import gemma_llm
@@ -50,7 +48,12 @@ agent = create_agent(
 )
 
 result = agent.invoke({
-    "messages": [{"role": "user", "content": "My email is john.doe@example.com and card is 5105-1051-0510-5100"}]
+    "messages": [
+        {
+            "role": "user",
+            "content": "My email is john.doe@example.com and card is 5105-1051-0510-5100",
+        }
+    ]
 })
 
-pprint(result)
+logging.info(result)
