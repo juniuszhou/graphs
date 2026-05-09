@@ -13,6 +13,32 @@ The core logic defined in `src/agent/graph.py`, showcases an single-step applica
 
 You can extend this graph to orchestrate more complex agentic workflows that can be visualized and debugged in LangGraph Studio.
 
+## Agent Architecture
+
+This repository contains multiple specialized agents organized in the following structure:
+
+```
+src/
+├── agent/           # Core agent implementations using LangChain/LangGraph
+│   ├── graph.py                 # Main agent graph definition
+│   ├── context.py               # Runtime context management
+│   ├── command.py               # Command processing and handling
+│   ├── skill.py                 # Skill system for extensible agent capabilities
+│   ├── middleware.py            # Middleware components for request processing
+│   ├── guardrails.py            # Safety and validation guardrails
+│   ├── checkpointer.py          # State persistence and checkpointing
+│   ├── store.py                 # Data storage abstractions
+│   ├── stream.py                # Streaming response handling
+│   ├── runtime.py               # Agent runtime execution
+│   ├── simple.py                # Simple agent implementations
+│   ├── mcp-client.py            # Model Context Protocol client
+│   ├── mcp-server.py            # Model Context Protocol server
+│   ├── deepwiki_mcp_agent.py    # Specialized Wikipedia MCP agent
+│   └── customize-middleware.py  # Middleware customization utilities
+└── deep/                  # Deep agent implementations
+    └── search.py          # Deep search agent implementation
+```
+
 ## Getting Started
 
 1. Install dependencies, along with the [LangGraph CLI](https://langchain-ai.github.io/langgraph/concepts/langgraph_cli/), which will be used to run the server.
@@ -59,9 +85,10 @@ For more advanced features and examples, refer to the [LangGraph documentation](
 
 LangGraph Studio also integrates with [LangSmith](https://smith.langchain.com/) for more in-depth tracing and collaboration with teammates, allowing you to analyze and optimize your chatbot's performance.
 
-src/
-agent: the graph based on langchain
-graph: the graph based on langgraph
-deep: the graph based on deepagent
+## Contributing
 
-##
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
