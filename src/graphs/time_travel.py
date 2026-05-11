@@ -1,98 +1,68 @@
-from dotenv import load_dotenv
+"""Simple agent."""
+
+import logging
+import sys
 import uuid
-from langgraph.graph import StateGraph, END, START
+from pathlib import Path
+from typing import NotRequired, TypedDict
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
 from langgraph.checkpoint.memory import InMemorySaver
-from typing import TypedDict, Annotated, Sequence, NotRequired
-from langchain_core.messages import (
-    BaseMessage,
-    SystemMessage,
-    HumanMessage,
-    ToolMessage,
-)
-from operator import add as add_messages
-from langchain_openai import ChatOpenAI
-from langchain_openai import OpenAIEmbeddings
-from langchain_community.document_loaders import PyPDFLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_chroma import Chroma
-from langchain_core.tools import tool
-
-load_dotenv()
-
-model = ChatOpenAI(
-    model="llama3.2:3b",
-    temperature=0,
-    base_url="http://localhost:11434/v1",
-    api_key="ollama",
-)
+from langgraph.graph import START, StateGraph
 
 
 class State(TypedDict):
+    """State of the agent."""
+
     topic: NotRequired[str]
     joke: NotRequired[str]
 
 
 def generate_topic(state: State):
-    """LLM call to generate a topic for the joke"""
-    msg = model.invoke("Give me a funny topic for a joke")
-    return {"topic": msg.content}
+    """Generate a topic for a joke."""
+    return {"topic": "socks in the dryer"}
 
 
 def write_joke(state: State):
-    """LLM call to write a joke based on the topic"""
-    msg = model.invoke(f"Write a short joke about {state['topic']}")
-    return {"joke": msg.content}
+    """Write a joke based on the topic."""
+    return {"joke": f"Why do {state['topic']} disappear? They elope!"}
 
 
-# Build workflow
-workflow = StateGraph(State)
-
-# Add nodes
-workflow.add_node("generate_topic", generate_topic)
-workflow.add_node("write_joke", write_joke)
-
-# Add edges to connect nodes
-workflow.add_edge(START, "generate_topic")
-workflow.add_edge("generate_topic", "write_joke")
-workflow.add_edge("write_joke", END)
-
-# Compile
 checkpointer = InMemorySaver()
-graph = workflow.compile(checkpointer=checkpointer)
+graph = (
+    StateGraph(State)
+    .add_node("generate_topic", generate_topic)
+    .add_node("write_joke", write_joke)
+    .add_edge(START, "generate_topic")
+    .add_edge("generate_topic", "write_joke")
+    .compile(checkpointer=checkpointer)
+)
 
-config = {
-    "configurable": {
-        "thread_id": uuid.uuid4(),
-    }
-}
-# invoke without any input
-state = graph.invoke({}, config)
+# Step 1: Run the graph
+config = {"configurable": {"thread_id": str(uuid.uuid7())}}
+result = graph.invoke({}, config)
 
-print("=" * 50)
-print("Topic: ", state["topic"])
-print()
-print("Joke: ", state["joke"])
+# Step 2: Find a checkpoint to replay from
+history = list(graph.get_state_history(config))
+# History is in reverse chronological order
+for state in history:
+    logging.warning(
+        f"next={state.next}, checkpoint_id={state.config['configurable']['checkpoint_id']}"
+    )
 
-states = list(graph.get_state_history(config))
+# Step 3: Replay from a specific checkpoint
+# Find the checkpoint before write_joke
+before_joke = next(s for s in history if s.next == ("write_joke",))
+replay_result = graph.invoke(None, before_joke.config)
 
-print("=" * 50)
-for state in states:
-    print(state.next)
-    print(state.config["configurable"]["checkpoint_id"])
-    print()
+# Fork: update state to change the topic
+fork_config = graph.update_state(
+    before_joke.config,
+    values={"topic": "chickens"},
+    # specify the node to resume from
+    as_node="generate_topic",
+)
 
-
-print("=" * 50)
-selected_state = states[1]
-print(selected_state.next)
-print(selected_state.values)
-print(selected_state.config)
-
-print("=" * 50)
-# update the state with a new topic, it is like a time travel. It will start from the selected state and continue from there.
-new_config = graph.update_state(selected_state.config, values={"topic": "chickens"})
-print(new_config)
-
-print("=" * 50)
-result = graph.invoke(None, new_config)
-print(result)
+# Resume from the fork — write_joke re-executes with the new topic
+fork_result = graph.invoke(None, fork_config)
+logging.warning(fork_result)

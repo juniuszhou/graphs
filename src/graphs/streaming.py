@@ -1,11 +1,11 @@
-from typing import Annotated, Sequence, TypedDict, Set
+"""Streaming graph."""
 
-import pprint
+import logging
+from operator import __or__ as or_messages
+from typing import Annotated, Set, TypedDict
 
-from langchain_core.messages import BaseMessage, HumanMessage
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph import END, START, StateGraph
-from operator import __or__ as or_messages
 
 # You cannot use set[BaseMessage]: messages are unhashable (try hash(HumanMessage(...))).
 # For "set-like" behavior — drop redundant updates — use Annotated[..., add_messages]:
@@ -13,15 +13,19 @@ from operator import __or__ as or_messages
 
 
 class State(TypedDict):
+    """State of the graph."""
+
     topic: Annotated[Set[str], or_messages]
     joke: str
 
 
 def add_topic(state: State):
+    """Add a topic to the state."""
     return {"topic": {"and cats"}}
 
 
 def generate_joke(state: State):
+    """Generate a joke based on the topic."""
     # Same id="topic-extra" as add_topic → this row replaces the previous one (no duplicate lines).
     return {
         "topic": {"and cats"},
@@ -51,10 +55,10 @@ for chunk in graph.stream(
     # Set stream_mode="updates" to stream only the updates to the graph state after each node
     # Other stream modes are also available. See supported stream modes for details
     # other modes are values, messages, updates, custom, checkpoints, tasks, debug
-    stream_mode="values",
+    stream_mode="updates",
 ):
-    print("=" * 50)
-    pprint.pprint(chunk)
-    print()
+    logging.warning("=" * 50)
+    logging.warning(chunk)
+    logging.warning("")
 
 snapshot = graph.get_state(config)

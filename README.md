@@ -1,17 +1,5 @@
 # New LangGraph Project
 
-[![CI](https://github.com/langchain-ai/new-langgraph-project/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/langchain-ai/new-langgraph-project/actions/workflows/unit-tests.yml)
-[![Integration Tests](https://github.com/langchain-ai/new-langgraph-project/actions/workflows/integration-tests.yml/badge.svg)](https://github.com/langchain-ai/new-langgraph-project/actions/workflows/integration-tests.yml)
-
-This template demonstrates a simple application implemented using [LangGraph](https://github.com/langchain-ai/langgraph), designed for showing how to get started with [LangGraph Server](https://langchain-ai.github.io/langgraph/concepts/langgraph_server/#langgraph-server) and using [LangGraph Studio](https://langchain-ai.github.io/langgraph/concepts/langgraph_studio/), a visual debugging IDE.
-
-<div align="center">
-  <img src="./static/studio_ui.png" alt="Graph view in LangGraph studio UI" width="75%" />
-</div>
-
-The core logic defined in `src/agent/graph.py`, showcases an single-step application that responds with a fixed string and the configuration provided.
-
-You can extend this graph to orchestrate more complex agentic workflows that can be visualized and debugged in LangGraph Studio.
 
 ## Agent Architecture
 
@@ -19,24 +7,10 @@ This repository contains multiple specialized agents organized in the following 
 
 ```
 src/
-├── agent/           # Core agent implementations using LangChain/LangGraph
-│   ├── graph.py                 # Main agent graph definition
-│   ├── context.py               # Runtime context management
-│   ├── command.py               # Command processing and handling
-│   ├── skill.py                 # Skill system for extensible agent capabilities
-│   ├── middleware.py            # Middleware components for request processing
-│   ├── guardrails.py            # Safety and validation guardrails
-│   ├── checkpointer.py          # State persistence and checkpointing
-│   ├── store.py                 # Data storage abstractions
-│   ├── stream.py                # Streaming response handling
-│   ├── runtime.py               # Agent runtime execution
-│   ├── simple.py                # Simple agent implementations
-│   ├── mcp-client.py            # Model Context Protocol client
-│   ├── mcp-server.py            # Model Context Protocol server
-│   ├── deepwiki_mcp_agent.py    # Specialized Wikipedia MCP agent
-│   └── customize-middleware.py  # Middleware customization utilities
-└── deep/                  # Deep agent implementations
-    └── search.py          # Deep search agent implementation
+- graph: code example to build graph and its component without involve any llm
+- llm: practice need llm and interact with llm
+- agent: based on langchain agent object
+- deep: practice on deep agent framework
 ```
 
 ## Getting Started
